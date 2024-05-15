@@ -4,3 +4,8 @@
 
 /api/.vs
 /api/starbase.db
+/api/obj
+/api/bin/Debug/net8.0
+/StargateAPITest/bin/Debug/net8.0
+/StargateAPITest/obj/Debug/net8.0
+/StargateAPITest/obj
