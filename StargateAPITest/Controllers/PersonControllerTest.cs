@@ -64,5 +64,40 @@ namespace StargateAPITest.Controllers
             var objectResult = (ObjectResult)result;
             Assert.Equal(objectResult.StatusCode, 500);
         }
+
+        [Fact]
+        public async void GetPersonByName_Succeeds()
+        {
+            var person = new GetPersonByNameResult();
+            _mediator.Setup(x => x.Send(It.IsAny<GetPersonByName>(), default(CancellationToken)))
+                .ReturnsAsync(person);
+
+            var name = "John Doe";
+            var result = await _personController.GetPersonByName(name);
+
+            Assert.NotNull(result);
+            Assert.IsType<ObjectResult>(result);
+            var objectResult = (ObjectResult)result;
+            Assert.Equal(objectResult.StatusCode, 200);
+            Assert.NotNull(objectResult.Value);
+            var getPersonResult = (GetPersonByNameResult)objectResult.Value;
+            Assert.Equal(person, getPersonResult);
+        }
+
+        [Fact]
+        public async void GetPersonByName_Fails()
+        {
+            var person = new GetPersonByNameResult();
+            _mediator.Setup(x => x.Send(It.IsAny<GetPersonByName>(), default(CancellationToken)))
+                .ThrowsAsync(new Exception("That person doesn't exist"));
+
+            var name = "John Doe";
+            var result = await _personController.GetPersonByName(name);
+
+            Assert.NotNull(result);
+            Assert.IsType<ObjectResult>(result);
+            var objectResult = (ObjectResult)result;
+            Assert.Equal(objectResult.StatusCode, 500);
+        }
     }
 }
